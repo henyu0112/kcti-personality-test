@@ -1,18 +1,11 @@
 .quiz__top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 10px;
 }
 
-.quiz__group {
-  font-weight: 800;
-}
-
 .quiz__count {
-  margin-left: auto;
   color: var(--muted);
   font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .quiz__bar {

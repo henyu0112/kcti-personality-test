@@ -1,0 +1,50 @@
+/* Stickers fill the empty margins either side of the 760px content column. */
+.decor {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc((100vw - 760px) / 2 - 24px);
+}
+
+.decor--left {
+  left: 0;
+}
+
+.decor--right {
+  right: 0;
+}
+
+@media (min-width: 1100px) {
+  .decor {
+    display: block;
+  }
+}
+
+.decor__sticker {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 10px;
+  background: var(--surface);
+  border: 2.5px solid var(--accent);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 45%, transparent);
+  font-weight: 800;
+  white-space: nowrap;
+  opacity: 0.85;
+  transform: rotate(var(--tilt));
+  animation: decor-float 6s ease-in-out var(--delay) infinite;
+}
+
+.decor__emoji {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+@keyframes decor-float {
+  50% {
+    transform: translateY(-10px) rotate(var(--tilt));
+  }
+}

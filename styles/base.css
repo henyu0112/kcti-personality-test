@@ -1,27 +1,16 @@
 /* Design tokens, reset and the app shell. Feature styles live next to their feature. */
 :root {
-  --bg: #fff6e5;
-  --surface: #fffdf8;
-  --ink: #2a1b14;
-  --muted: #6b5649;
-  --line: #2a1b14;
-  --shadow-color: #2a1b14;
-  --accent: #d9480f;
+  --bg: #eee5fb;
+  --surface: #fbf8ff;
+  --ink: #2b1a47;
+  --muted: #6a5a85;
+  --line: #2b1a47;
+  --shadow-color: #2b1a47;
+  --accent: #7c4dcc;
   --on-accent: #ffffff;
   --radius: 14px;
   --font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1b1410;
-    --surface: #281d17;
-    --ink: #fff1e0;
-    --muted: #cdb8a6;
-    --line: #f3dcc3;
-    --shadow-color: #000000;
-  }
+  color-scheme: light;
 }
 
 *,
@@ -37,7 +26,9 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 1px 1px, rgb(124 77 204 / 0.16) 1.5px, transparent 0);
+  background-size: 24px 24px;
   color: var(--ink);
   font-family: var(--font);
   font-size: 1rem;
@@ -70,7 +61,18 @@ button {
 }
 
 /* ---- App shell ---- */
+/* Decorative layer behind the page; features fill it through the "background" slot. */
+.shell-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .shell {
+  position: relative;
+  z-index: 1;
   max-width: 760px;
   min-height: 100vh;
   margin: 0 auto;

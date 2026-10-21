@@ -6,7 +6,6 @@ export function renderQuiz(app) {
 
   const total = session.questionOrder.length;
   const question = data.questionById.get(session.questionOrder[step]);
-  const category = data.categoryById.get(question.category);
   const chosen = answers[question.id];
 
   const options = session.optionOrder[question.id].map((optionId, index) =>
@@ -25,14 +24,8 @@ export function renderQuiz(app) {
 
   return h(
     'section',
-    { class: 'quiz', style: { '--accent': category.color } },
-    h(
-      'div',
-      { class: 'quiz__top' },
-      h('span', { class: 'badge' }, category.letter),
-      h('span', { class: 'quiz__group' }, t(`categories.${category.id}.title`)),
-      h('span', { class: 'quiz__count' }, t('ui.quiz.progress', { current: step + 1, total })),
-    ),
+    { class: 'quiz' },
+    h('div', { class: 'quiz__top' }, h('span', { class: 'quiz__count' }, t('ui.quiz.progress', { current: step + 1, total }))),
     h(
       'div',
       {
