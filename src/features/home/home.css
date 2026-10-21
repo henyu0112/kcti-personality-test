@@ -1,0 +1,58 @@
+.home__hero {
+  padding: 12px 0 20px;
+}
+
+.home__title {
+  font-size: clamp(3.5rem, 18vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+
+.home__subtitle {
+  margin-top: 8px;
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+  font-weight: 800;
+}
+
+.home__lead {
+  margin-top: 10px;
+  max-width: 34rem;
+  color: var(--muted);
+}
+
+.home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.group-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+}
+
+.group-tile__letter {
+  align-self: flex-start;
+  margin-bottom: 4px;
+  font-size: 1.3rem;
+}
+
+.group-tile__title {
+  font-weight: 800;
+}
+
+.group-tile__subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

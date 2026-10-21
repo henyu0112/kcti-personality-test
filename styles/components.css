@@ -1,0 +1,91 @@
+/* Shared building blocks. Anything with a feature-specific name belongs in that feature's css. */
+.card {
+  padding: 20px;
+  background: var(--surface);
+  border: 2.5px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 2.5px solid var(--line);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--shadow-color);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--shadow-color);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow-color);
+}
+
+.btn--ghost {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.btn--small {
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.pill {
+  display: inline-block;
+  padding: 2px 12px;
+  background: var(--bg);
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.bar {
+  height: 10px;
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.25s;
+}

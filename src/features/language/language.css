@@ -1,0 +1,20 @@
+.lang-switch {
+  display: inline-flex;
+  border: 2.5px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.lang-switch__button {
+  padding: 6px 14px;
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lang-switch__button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--bg);
+}

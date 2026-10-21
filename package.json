@@ -1,0 +1,11 @@
+{
+  "name": "kcti",
+  "version": "0.1.0",
+  "description": "KCTI - Kacau Character Type Indicator. A funny Malaysian-slang personality test.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  }
+}
