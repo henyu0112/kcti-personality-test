@@ -3,58 +3,67 @@ import assert from 'node:assert/strict';
 import { data } from '../src/data/index.js';
 import { computeResult, isComplete, pruneAnswers } from '../src/engine/scoring.js';
 import { createSession, isValidSession } from '../src/engine/session.js';
+import { buildType } from '../src/engine/type.js';
 
-/** Answer every question with the option at `pick(question)`. */
-const answerAll = (pick) => Object.fromEntries(data.questions.map((q) => [q.id, pick(q)]));
 const resultFor = (results, categoryId) => results.find((r) => r.categoryId === categoryId);
 
-test('always picking the first personality of each category makes it the winner', () => {
-  const answers = answerAll((q) => q.options[0].id);
-  const results = computeResult(data, answers);
+/** The option for `personalityId` if the question offers it, else its first option. */
+const choose = (question, personalityId) =>
+  question.options.some((o) => o.id === personalityId) ? personalityId : question.options[0].id;
 
-  for (const result of results) {
-    const first = data.personalities.find((p) => p.category === result.categoryId).id;
-    assert.equal(result.winner, first);
-    assert.equal(result.scores[first], result.questionCount);
-    assert.equal(result.tied, false);
+/** Answer every question in `categoryId` with `choose(question, personalityId)`; others use their first option. */
+const answersFavouring = (personalityId, categoryId) =>
+  Object.fromEntries(
+    data.questions.map((q) => [q.id, q.category === categoryId ? choose(q, personalityId) : q.options[0].id]),
+  );
+
+const ids = (categoryId) => data.personalities.filter((p) => p.category === categoryId).map((p) => p.id);
+
+test('every personality can win its group when picked whenever it is offered', () => {
+  for (const category of data.categories) {
+    for (const personalityId of ids(category.id)) {
+      const result = resultFor(computeResult(data, answersFavouring(personalityId, category.id)), category.id);
+      assert.equal(result.winner, personalityId, `${personalityId} should win ${category.id}`);
+    }
   }
 });
 
-test('the winner is the most-picked personality', () => {
-  const answers = answerAll((q) => q.options[0].id);
-  // In the kacau category, move 3 of the 6 answers to "gai" (4th personality).
-  ['k1', 'k2', 'k3'].forEach((id) => (answers[id] = 'gai'));
-  answers.k4 = 'gai'; // gai now has 4, hin has 2
+test('ranking uses the rate, so a personality offered less often is not at a disadvantage', () => {
+  // "hin" is offered in 6 questions and "nihenkeai" in 7 (see data/questions.js).
+  // Both get 3 picks, but 3/6 beats 3/7 even though nihenkeai was picked first.
+  const answers = Object.fromEntries(data.questions.map((q) => [q.id, q.options[0].id]));
+  Object.assign(answers, { k1: 'nihenkeai', k6: 'nihenkeai', k7: 'nihenkeai', k2: 'hin', k3: 'hin', k4: 'hin', k5: 'gai', k8: 'bird' });
 
-  const kacau = resultFor(computeResult(data, answers), 'kacau');
-  assert.equal(kacau.winner, 'gai');
-  assert.equal(kacau.scores.gai, 4);
-  assert.equal(kacau.supporting.length, 4);
+  const result = resultFor(computeResult(data, answers), 'kacau');
+  assert.equal(result.scores.hin, 3);
+  assert.equal(result.scores.nihenkeai, 3);
+  assert.equal(result.offered.hin, 6);
+  assert.equal(result.offered.nihenkeai, 7);
+  assert.equal(result.winner, 'hin');
+  assert.equal(result.tied, false);
 });
 
-test('a tie is broken by the answer given first, and flagged', () => {
-  const answers = answerAll((q) => q.options[0].id);
-  const order = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6'];
-  // 3 x "bird" and 3 x "gai": whichever was picked first should win.
-  ['k1', 'k2', 'k3'].forEach((id) => (answers[id] = 'bird'));
-  ['k4', 'k5', 'k6'].forEach((id) => (answers[id] = 'gai'));
+test('a tie on rate is broken by the answer given first, and flagged', () => {
+  // hin and zenmeban are both offered 6 times. Give each 3 picks.
+  const answers = Object.fromEntries(data.questions.map((q) => [q.id, q.options[0].id]));
+  Object.assign(answers, { k1: 'zenmeban', k2: 'hin', k3: 'zenmeban', k4: 'hin', k5: 'zenmeban', k7: 'hin', k6: 'gai', k8: 'bird' });
 
-  const asked = computeResult(data, answers, order);
-  assert.equal(resultFor(asked, 'kacau').winner, 'bird');
-  assert.equal(resultFor(asked, 'kacau').tied, true);
+  const order = ['k1', 'k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'k8'];
+  const asked = resultFor(computeResult(data, answers, order), 'kacau');
+  assert.equal(asked.scores.hin, 3);
+  assert.equal(asked.scores.zenmeban, 3);
+  assert.equal(asked.winner, 'zenmeban'); // zenmeban was picked first (k1)
+  assert.equal(asked.tied, true);
 
-  const reversed = computeResult(data, answers, [...order].reverse());
-  assert.equal(resultFor(reversed, 'kacau').winner, 'gai');
+  const reversed = resultFor(computeResult(data, answers, [...order].reverse()), 'kacau');
+  assert.equal(reversed.winner, 'hin'); // hin comes first when asked in reverse (k7)
 });
 
 test('categories are scored independently', () => {
-  const answers = answerAll((q) => q.options[0].id);
-  const before = resultFor(computeResult(data, answers), 'cara').winner;
+  const before = resultFor(computeResult(data, answersFavouring('bird', 'kacau')), 'cara').winner;
+  const after = computeResult(data, answersFavouring('gai', 'kacau'));
 
-  ['k1', 'k2', 'k3', 'k4', 'k5', 'k6'].forEach((id) => (answers[id] = 'bird'));
-  const after = computeResult(data, answers);
-
-  assert.equal(resultFor(after, 'kacau').winner, 'bird');
+  assert.equal(resultFor(after, 'kacau').winner, 'gai');
   assert.equal(resultFor(after, 'cara').winner, before);
 });
 
@@ -66,15 +75,32 @@ test('no answers means no winner instead of a crash', () => {
 });
 
 test('isComplete and pruneAnswers', () => {
-  const full = answerAll((q) => q.options[0].id);
+  const full = Object.fromEntries(data.questions.map((q) => [q.id, q.options[0].id]));
   assert.equal(isComplete(data, full), true);
   assert.equal(isComplete(data, { ...full, k1: undefined }), false);
   assert.equal(isComplete(data, { ...full, k1: 'not-an-option' }), false);
+  // k1 does not offer "hin" (it is omitted there), so that is not a valid answer.
+  assert.equal(isComplete(data, { ...full, k1: 'hin' }), false);
 
-  assert.deepEqual(pruneAnswers(data, { k1: 'hin', k2: 'nope', ghost: 'hin' }), { k1: 'hin' });
+  assert.deepEqual(pruneAnswers(data, { k1: 'gai', k2: 'nope', ghost: 'hin', k1b: 'x' }), { k1: 'gai' });
 });
 
-test('a session covers every question once, alternating K C T I, with all options shuffled in', () => {
+test('the final type joins one letter per group, in K C T I order', () => {
+  const favourites = { kacau: 'gai', cara: 'steady', tengah: 'hmmm', impossible: 'siao' };
+  const answers = Object.fromEntries(
+    data.questions.map((q) => [q.id, choose(q, favourites[q.category])]),
+  );
+
+  const type = buildType(data, computeResult(data, answers));
+  assert.equal(type.code, 'GTMS');
+  assert.deepEqual(type.parts.map((part) => part.personalityId), ['gai', 'steady', 'hmmm', 'siao']);
+});
+
+test('there is no type until every group has a winner', () => {
+  assert.equal(buildType(data, computeResult(data, {})), null);
+});
+
+test('a session covers every question once, alternating K C T I, with options shuffled', () => {
   const session = createSession(data);
 
   assert.equal(isValidSession(data, session), true);

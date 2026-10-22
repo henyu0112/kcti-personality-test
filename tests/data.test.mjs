@@ -8,10 +8,12 @@ const flatten = (object, prefix = '') =>
     value && typeof value === 'object' ? flatten(value, `${prefix}${key}.`) : [`${prefix}${key}`],
   );
 
+const personalitiesOf = (categoryId) => data.personalities.filter((p) => p.category === categoryId);
+const questionsOf = (categoryId) => data.questions.filter((q) => q.category === categoryId);
+
 test('every category has exactly 5 personalities', () => {
   for (const category of data.categories) {
-    const count = data.personalities.filter((p) => p.category === category.id).length;
-    assert.equal(count, 5, `${category.id} has ${count}`);
+    assert.equal(personalitiesOf(category.id).length, 5, category.id);
   }
 });
 
@@ -27,39 +29,73 @@ test('ids are unique', () => {
   }
 });
 
-test('every question offers one option per personality of its category', () => {
+test('type letters are single capitals, unique within their group', () => {
+  for (const category of data.categories) {
+    const letters = personalitiesOf(category.id).map((p) => p.code);
+    assert.ok(letters.every((letter) => /^[A-Z]$/.test(letter)), `${category.id}: ${letters}`);
+    assert.equal(new Set(letters).size, letters.length, `${category.id}: duplicate letter in ${letters}`);
+  }
+});
+
+test('every question shows 4 different personalities of its own category', () => {
   for (const question of data.questions) {
-    const expected = data.personalities.filter((p) => p.category === question.category).map((p) => p.id).sort();
-    assert.deepEqual(question.options.map((o) => o.id).sort(), expected, question.id);
+    const shown = question.options.map((o) => o.id);
+    assert.equal(shown.length, 4, question.id);
+    assert.equal(new Set(shown).size, 4, `${question.id} repeats an option`);
+
+    const own = personalitiesOf(question.category).map((p) => p.id);
+    assert.ok(shown.every((id) => own.includes(id)), `${question.id} shows a personality from another group`);
+    assert.ok(!shown.includes(question.omit), `${question.id} still shows its omitted option`);
   }
 });
 
 test('every category has the same number of questions', () => {
-  const counts = data.categories.map((c) => data.questions.filter((q) => q.category === c.id).length);
+  const counts = data.categories.map((c) => questionsOf(c.id).length);
   assert.equal(new Set(counts).size, 1, `counts differ: ${counts}`);
 });
 
+test('personalities are offered about equally often within a group (spread of at most 1)', () => {
+  for (const category of data.categories) {
+    const counts = personalitiesOf(category.id).map(
+      (p) => questionsOf(category.id).filter((q) => q.options.some((o) => o.id === p.id)).length,
+    );
+    assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `${category.id}: offered ${counts} times`);
+  }
+});
+
 for (const [code, bundle] of Object.entries(locales)) {
-  test(`locale "${code}" has all text for every category, personality and question`, () => {
+  test(`locale "${code}" has all text for every category, personality, type word and question`, () => {
     for (const category of data.categories) {
       const text = bundle.categories[category.id];
-      for (const field of ['title', 'subtitle', 'summary']) assert.ok(text?.[field], `${category.id}.${field}`);
-      assert.ok(text.summary.includes('{name}'), `${category.id}.summary needs {name}`);
+      for (const field of ['title', 'subtitle']) assert.ok(text?.[field], `${category.id}.${field}`);
     }
 
     for (const personality of data.personalities) {
       const text = bundle.personalities[personality.id];
       for (const field of ['name', 'meaning', 'description', 'why']) assert.ok(text?.[field], `${personality.id}.${field}`);
+
+      const { role } = data.categoryById.get(personality.category);
+      assert.ok(bundle.types[personality.id]?.[role], `types.${personality.id}.${role}`);
     }
 
     for (const question of data.questions) {
       const text = bundle.questions[question.id];
       assert.ok(text?.prompt, `${question.id}.prompt`);
       for (const option of question.options) assert.ok(text.options?.[option.id], `${question.id}.options.${option.id}`);
+      for (const extra of Object.keys(text.options ?? {})) {
+        assert.ok(question.options.some((o) => o.id === extra), `${question.id} has text for unused option "${extra}"`);
+      }
     }
   });
 
   test(`locale "${code}" has the same UI keys as English`, () => {
     assert.deepEqual(flatten(bundle.ui).sort(), flatten(locales.en.ui).sort());
+  });
+
+  test(`locale "${code}" nickname and summary templates use every role placeholder`, () => {
+    for (const { role } of data.categories) {
+      const used = bundle.ui.result.nickname.includes(`{${role}}`) || bundle.ui.result.typeSummary.includes(`{${role}}`);
+      assert.ok(used, `neither ui.result.nickname nor ui.result.typeSummary uses {${role}}`);
+    }
   });
 }

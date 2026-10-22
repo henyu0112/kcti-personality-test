@@ -7,7 +7,7 @@ export default {
   home: {
     eyebrow: 'Kacau · Cara hidup · Tengah loading · Impossible',
     title: '你是哪一种马来西亚性格？',
-    lead: '{questions} 个日常情境，{groups} 个组别。每组得出一个结果，还会告诉你为什么这样分配给你。',
+    lead: '{questions} 个日常情境，{groups} 个组别。每组得出一个性格，合成你专属的 4 个字母 KCTI 类型。',
     groups: '四个组别',
     start: '开始测试',
     resume: '继续（{done}/{total}）',
@@ -24,14 +24,12 @@ export default {
   },
 
   result: {
-    eyebrow: '你的 KCTI 结果',
-    title: '你是……',
-    summaryJoin: '',
+    eyebrow: '你的 KCTI 类型',
+    nickname: '{adjective}的{noun}',
+    typeSummary: '你{thinking}，而且{facing}。',
+    traits: '你的四个特质',
     means: '意思：{meaning}',
     why: '为什么是你',
-    evidence: '在 {total} 个情境中，你有 {count} 次选了这一类的答案',
-    scores: '得分分布',
-    tie: '几种类型不相上下，所以用你的第一直觉来决定。',
     retake: '再测一次',
     home: '回到首页',
   },

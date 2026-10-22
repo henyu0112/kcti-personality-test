@@ -7,7 +7,7 @@ export default {
   home: {
     eyebrow: 'Kacau · Cara hidup · Tengah loading · Impossible',
     title: 'Which Malaysian personality are you?',
-    lead: '{questions} everyday situations. {groups} groups. One result from each group, and a reason why it was given to you.',
+    lead: '{questions} everyday situations. {groups} groups. You get one personality from each, combined into your own 4-letter KCTI type.',
     groups: 'The four groups',
     start: 'Start the test',
     resume: 'Continue ({done}/{total})',
@@ -24,14 +24,12 @@ export default {
   },
 
   result: {
-    eyebrow: 'Your KCTI result',
-    title: 'You are…',
-    summaryJoin: ' ',
+    eyebrow: 'Your KCTI type',
+    nickname: 'The {adjective} {noun}',
+    typeSummary: 'You {thinking}, and you {facing}.',
+    traits: 'Your four traits',
     means: 'Means: {meaning}',
     why: 'Why you got this',
-    evidence: 'You picked this type of answer in {count} of {total} situations',
-    scores: 'Score breakdown',
-    tie: 'It was a close call between types, so your first instinct broke the tie.',
     retake: 'Take the test again',
     home: 'Back to home',
   },

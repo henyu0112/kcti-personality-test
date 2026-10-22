@@ -1,7 +1,9 @@
 # KCTI - Kacau Character Type Indicator
 
-A funny Malaysian-slang personality test. 4 groups (K, C, T, I) x 5 personalities, 24 questions,
-English and Chinese. You get one personality per group, plus the reasons why.
+A funny Malaysian-slang personality test. 4 groups (K, C, T, I) x 5 personalities, 32 questions
+(4 answers each), English and Chinese. You get one personality per group, combined into a
+4-letter type like **GTMS** with a nickname ("The Doomed Pillar"). How the score was reached is
+deliberately not shown.
 
 | Letter | Group | Personalities |
 |---|---|---|
@@ -58,9 +60,11 @@ Register it with one line in `src/features/index.js`.
 
 ## Common changes
 
-**Add or edit a question** - add `question('k7', 'kacau')` in `data/questions.js`, then add `k7: { prompt, options: {...} }` in **every** language file. `npm test` tells you what is missing. Keep the same number of questions in each group (a test enforces it).
+**Add or edit a question** - add `question('k9', 'kacau', 'bird')` in `data/questions.js` (the last argument is the personality left out, so the question shows 4 of the 5), then add `k9: { prompt, options: {...} }` with exactly those 4 answers in **every** language file. `npm test` tells you what is missing. Keep the same number of questions in each group, and spread the omissions evenly (both are tested).
 
-**Add a personality** - add it to `data/personalities.js`, add its text in each language's `personalities.js`, and add an answer for it to every question in that group (a test enforces this).
+**Add a personality** - add it to `data/personalities.js` (with a unique `code` letter for its group), add its text in each language's `personalities.js`, add its nickname word in each language's `types.js`, and make sure questions in that group offer it (a test checks all of this).
+
+**Change the final type wording** - the code is the four `code` letters in K C T I order (`engine/type.js`). The nickname is `ui.result.nickname`, built from the K and C words, and the summary is `ui.result.typeSummary`, built from the T and I words. The word each group supplies is set by its `role` in `data/categories.js`; the words themselves are in `locales/<lang>/types.js`. To hand-write a special title for one combination later, check `type.code` in the result view before using the generated nickname.
 
 **Add a group (e.g. a 5th letter)** - add it to `data/categories.js`, its personalities and questions, and its text in `locales/*/categories.js`. Home, quiz and result screens pick it up automatically.
 
@@ -73,4 +77,4 @@ Register it with one line in `src/features/index.js`.
 ## Notes
 
 - Progress and language are saved in `localStorage` (`kcti:v1`). If you change the questions, a stale saved quiz is discarded automatically.
-- Tie-break: if two personalities in a group score the same, the one the person picked first wins ("first instinct"), and the result page says so.
+- Scoring: each question shows 4 of a group's 5 personalities, so a personality's score is its *rate* (picks out of times offered), which keeps all five equally easy to win. If two still tie, the one the person picked first wins ("first instinct"). `computeResult` returns the scores and the answers that counted, but the result page does not display them.
