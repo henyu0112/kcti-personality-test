@@ -3,7 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Pick the theme before the first paint so a saved dark theme doesn't flash light.
+      // Mirrors resolveSettings() in src/features/settings/resolve.js.
+      try {
+        var saved = JSON.parse(localStorage.getItem('kcti:v1')).settings || {};
+        var dark = saved.theme === 'dark' || (saved.theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (error) {}
+    </script>
     <title>KCTI</title>
     <link rel="stylesheet" href="styles/base.css" />
     <link rel="stylesheet" href="styles/components.css" />

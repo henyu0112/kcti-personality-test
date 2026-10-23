@@ -5,6 +5,19 @@ export default {
   lang: { label: 'Language' },
   nav: { label: 'Main menu', test: 'Take the test', types: 'All types' },
 
+  settings: {
+    open: 'Settings',
+    title: 'Settings',
+    close: 'Close settings',
+    reset: 'Reset to defaults',
+    theme: { label: 'Colour theme', light: 'Light', dark: 'Dark', system: 'Match device' },
+    textSize: { label: 'Text size', normal: 'Normal', large: 'Large', xlarge: 'Extra large' },
+    reduceMotion: { label: 'Reduce motion', hint: 'Stops animations and moving decorations' },
+    highContrast: { label: 'High contrast', hint: 'Stronger colours and borders' },
+    wideSpacing: { label: 'Comfortable spacing', hint: 'More space between lines and letters' },
+    hideDecor: { label: 'Hide decorations', hint: 'Removes the floating stickers' },
+  },
+
   gallery: {
     title: 'All personalities',
     lead: '{personalities} personalities in {groups} groups. Your result is one from every group, joined into a 4-letter type.',

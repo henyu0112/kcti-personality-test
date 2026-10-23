@@ -19,7 +19,7 @@
 }
 
 .result__code span {
-  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) var(--ink-mix), white);
   text-shadow: 3px 3px 0 color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
@@ -31,6 +31,39 @@
 .result__summary {
   margin-top: 6px;
   color: var(--muted);
+}
+
+/* Reveal: the four letters pop in one by one, then the rest settles in. It plays once per
+   result (see `revealed` in view.js) and is switched off by the "Reduce motion" setting. */
+.is-reveal .result__code span {
+  animation: reveal-pop 0.6s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  animation-delay: calc(0.2s + var(--i) * 0.4s);
+}
+
+.is-reveal .result__nickname {
+  animation: reveal-rise 0.6s ease-out 1.9s both;
+}
+
+.is-reveal .result__summary {
+  animation: reveal-rise 0.6s ease-out 2.2s both;
+}
+
+.is-reveal .result__chips {
+  animation: reveal-rise 0.6s ease-out 2.5s both;
+}
+
+@keyframes reveal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.2) rotate(-12deg);
+  }
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }
 
 .result__chips {
@@ -105,7 +138,7 @@
 
 .result-card__letter {
   margin-left: auto;
-  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) var(--ink-mix), white);
   font-size: 2.4rem;
   font-weight: 900;
   opacity: 0.35;

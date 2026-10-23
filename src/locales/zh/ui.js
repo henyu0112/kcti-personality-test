@@ -5,6 +5,19 @@ export default {
   lang: { label: '语言' },
   nav: { label: '主菜单', test: '开始测试', types: '全部类型' },
 
+  settings: {
+    open: '设置',
+    title: '设置',
+    close: '关闭设置',
+    reset: '恢复默认',
+    theme: { label: '颜色主题', light: '浅色', dark: '深色', system: '跟随设备' },
+    textSize: { label: '文字大小', normal: '标准', large: '大', xlarge: '特大' },
+    reduceMotion: { label: '减少动画', hint: '停止动画和会动的装饰' },
+    highContrast: { label: '高对比度', hint: '更鲜明的颜色和边框' },
+    wideSpacing: { label: '舒适间距', hint: '加大行距和字距' },
+    hideDecor: { label: '隐藏装饰', hint: '移除漂浮的贴纸' },
+  },
+
   gallery: {
     title: '全部性格',
     lead: '{groups} 个组别共 {personalities} 种性格。你的结果是每组各一个，合成 4 个字母的类型。',

@@ -57,7 +57,7 @@
   justify-content: center;
   width: 46px;
   height: 46px;
-  color: var(--accent);
+  color: color-mix(in srgb, var(--accent) var(--ink-mix), white);
   background: color-mix(in srgb, var(--accent) 14%, var(--surface));
   border: 2.5px solid var(--line);
   border-radius: 12px;

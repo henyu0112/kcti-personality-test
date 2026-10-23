@@ -16,5 +16,6 @@ import language from './language/index.js';
 import decor from './decor/index.js';
 import gallery from './gallery/index.js';
 import share from './share/index.js';
+import settings from './settings/index.js';
 
-export default [home, gallery, quiz, result, share, language, decor];
+export default [home, gallery, quiz, result, share, language, settings, decor];

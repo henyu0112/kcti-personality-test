@@ -92,6 +92,21 @@ export const ICON_SHAPES = {
     ['circle', { cx: 12, cy: 12, r: 10 }],
     ['path', { d: 'm4.9 4.9 14.2 14.2' }],
   ],
+  sliders: [
+    ['path', { d: 'M4 6h8' }],
+    ['path', { d: 'M16 6h4' }],
+    ['circle', { cx: 14, cy: 6, r: 2 }],
+    ['path', { d: 'M4 12h2' }],
+    ['path', { d: 'M10 12h10' }],
+    ['circle', { cx: 8, cy: 12, r: 2 }],
+    ['path', { d: 'M4 18h9' }],
+    ['path', { d: 'M17 18h3' }],
+    ['circle', { cx: 15, cy: 18, r: 2 }],
+  ],
+  x: [
+    ['path', { d: 'M18 6 6 18' }],
+    ['path', { d: 'm6 6 12 12' }],
+  ],
   lock: [
     ['rect', { x: 4, y: 11, width: 16, height: 10, rx: 2 }],
     ['path', { d: 'M8 11V7a4 4 0 0 1 8 0v4' }],

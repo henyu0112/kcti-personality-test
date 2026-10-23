@@ -8,9 +8,66 @@
   --shadow-color: #2b1a47;
   --accent: #7c4dcc;
   --on-accent: #ffffff;
+  /* How much of a group's colour is kept when it is used as *text*; dark mode lightens it. */
+  --ink-mix: 100%;
   --radius: 14px;
   --font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   color-scheme: light;
+}
+
+/* ---- Settings (set as data-* attributes on <html> by the settings feature) ---- */
+:root[data-theme='dark'] {
+  --bg: #1a1326;
+  --surface: #261b36;
+  --ink: #f1e9ff;
+  --muted: #b9a8d6;
+  --line: #d8c7ff;
+  --shadow-color: #0b0612;
+  --accent: #8a5fe0;
+  --ink-mix: 55%;
+  color-scheme: dark;
+}
+
+:root[data-contrast='high'] {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #222222;
+  --line: #000000;
+  --shadow-color: #000000;
+  --accent: #5b2fb3;
+}
+
+:root[data-contrast='high'][data-theme='dark'] {
+  --bg: #000000;
+  --surface: #0b0b0b;
+  --ink: #ffffff;
+  --muted: #eeeeee;
+  --line: #ffffff;
+  --shadow-color: #000000;
+  --accent: #8a5fe0;
+}
+
+:root[data-contrast='high'] body {
+  background-image: none;
+}
+
+:root[data-text-size='large'] {
+  font-size: 112.5%;
+}
+
+:root[data-text-size='xlarge'] {
+  font-size: 125%;
+}
+
+:root[data-spacing='wide'] body {
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+  word-spacing: 0.1em;
+}
+
+:root[data-decor='off'] .shell-bg {
+  display: none;
 }
 
 *,
@@ -144,10 +201,18 @@ button {
   text-align: center;
 }
 
+/* Motion off: by the "Reduce motion" setting, or (before it loads) by the device preference. */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  :root:not([data-motion]) *,
+  :root:not([data-motion]) *::before,
+  :root:not([data-motion]) *::after {
     transition: none !important;
     animation: none !important;
   }

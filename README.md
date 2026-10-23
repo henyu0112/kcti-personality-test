@@ -30,7 +30,7 @@ src/
   engine/     HOW it is scored: pure functions, no DOM. scoring.js, session.js.
   core/       Small app plumbing: store, router, i18n, dom helper, shell, persistence.
   features/   WHAT THE USER SEES: one folder per feature (home, gallery, quiz, result, share,
-              language, decor).
+              language, settings, decor).
   shared/     Small helpers used by more than one feature (features never import each other).
   main.js     Wires core + features together. Rarely needs to change.
 styles/       Design tokens and shared components. Feature css lives in the feature folder.
@@ -82,6 +82,10 @@ Register it with one line in `src/features/index.js`.
 **Result links** - `#/result/GTMS` shows the result for any valid code (`parseType` in `engine/type.js` rejects bad ones and sends people home). Finishing the quiz lands on the person's own code URL, so the link is already in the address bar.
 
 **The share panel and card image** - the `share` feature plugs into the result page's `result.after` slot. `features/share/card.js` draws the 1080 x 1350 picture on a canvas; change its look there. On phones the Share button hands the picture to the share sheet (WhatsApp, Instagram...); elsewhere there are Copy link and Save image buttons.
+
+**The result reveal** - the four letters pop in one by one, then the nickname, summary and traits settle in (CSS in `features/result/result.css`). It plays once per result per visit; switching language or opening settings shows the finished page instead of replaying it.
+
+**Settings (dark mode and accessibility)** - the sliders button in the header opens the `settings` feature's dialog: colour theme (light / dark / match device), text size, reduce motion, high contrast, comfortable spacing and hide decorations, plus a reset. Choices are saved in `localStorage`. `features/settings/resolve.js` turns them into `data-*` attributes on `<html>` (`data-theme`, `data-text-size`, `data-motion`, `data-contrast`, `data-spacing`, `data-decor`), and `styles/base.css` reacts to those, so adding a new option means a new attribute, one CSS rule and a line in the dialog's option list. "Reduce motion" follows the device setting until the person changes it. When you add colours, use the `--bg`/`--ink`/`--line`... tokens (and `--ink-mix` for coloured text) so dark mode and high contrast work automatically.
 
 **The "All types" tab** - the `gallery` feature (`#/types`) lists every personality from the same data and locale files as the quiz, so a new personality shows up there automatically. Tabs come from each feature's `nav` field.
 

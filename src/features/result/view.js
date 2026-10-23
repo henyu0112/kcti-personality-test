@@ -2,6 +2,10 @@ import { h } from '../../core/dom.js';
 import { renderSlot } from '../../core/slots.js';
 import { describeType } from '../../shared/type-text.js';
 
+// Types whose reveal animation has already played in this visit. Language switches and
+// other re-renders show the finished result instead of replaying it.
+const revealed = new Set();
+
 // How a result was worked out (scores, which answers counted) is deliberately not shown:
 // the mystery is part of the fun. This page only needs the type, so it works for a result
 // opened from a link as well as for the person's own.
@@ -42,6 +46,8 @@ function renderCategoryCard(app, part) {
 export function renderResult(app, { type, isOwn }) {
   const { t, data, services } = app;
   const { nickname, summary } = describeType(app, type);
+  const reveal = !revealed.has(type.code);
+  revealed.add(type.code);
 
   const actions = isOwn
     ? [
@@ -58,13 +64,13 @@ export function renderResult(app, { type, isOwn }) {
     { class: 'result' },
     h(
       'header',
-      { class: 'card result__hero' },
+      { class: `card result__hero${reveal ? ' is-reveal' : ''}` },
       h('p', { class: 'eyebrow' }, t(isOwn ? 'ui.result.eyebrow' : 'ui.result.eyebrowShared')),
       h(
         'h1',
         { class: 'result__code', 'aria-label': type.code },
-        type.parts.map(({ categoryId, letter }) =>
-          h('span', { style: { '--accent': data.categoryById.get(categoryId).color }, 'aria-hidden': 'true' }, letter),
+        type.parts.map(({ categoryId, letter }, index) =>
+          h('span', { style: { '--accent': data.categoryById.get(categoryId).color, '--i': index }, 'aria-hidden': 'true' }, letter),
         ),
       ),
       h('p', { class: 'result__nickname' }, nickname),
