@@ -1,0 +1,86 @@
+.gallery {
+  display: grid;
+  gap: 28px;
+}
+
+.gallery__title {
+  font-size: clamp(1.8rem, 7vw, 2.6rem);
+  font-weight: 900;
+}
+
+.gallery__lead {
+  margin-top: 6px;
+  max-width: 36rem;
+  color: var(--muted);
+}
+
+.gallery__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.gallery__group-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.gallery__group-subtitle {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.gallery__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+
+.gallery-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  border-top: 8px solid var(--accent);
+}
+
+.gallery-card__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gallery-card__emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.gallery-card__name {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.gallery-card__code {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.gallery-card .pill {
+  justify-self: start;
+}
+
+.gallery-card__description {
+  color: var(--ink);
+  font-size: 0.95rem;
+}

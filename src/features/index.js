@@ -6,12 +6,15 @@
 //   state     { key: initialValue }  its slice(s) of the shared store
 //   persist   ['key', ...]           which of its state keys are saved to localStorage
 //   routes    { '/path': (app) => Node | { redirect } }
-//   slots     { header | background: (app) => Node }   small pieces shown in the shell
+//   slots     { '<name>': (app, ...args) => Node }  content for a named place (see core/slots.js)
+//   nav       { path, label, order }                a tab under the header (label is a text key)
 //   init(app) runs once at startup; use it to expose a service on app.services.<id>
 import home from './home/index.js';
 import quiz from './quiz/index.js';
 import result from './result/index.js';
 import language from './language/index.js';
 import decor from './decor/index.js';
+import gallery from './gallery/index.js';
+import share from './share/index.js';
 
-export default [home, quiz, result, language, decor];
+export default [home, gallery, quiz, result, share, language, decor];

@@ -29,7 +29,9 @@ src/
   locales/    WHAT IT SAYS: en/ and zh/ - every visible string, keyed by those ids.
   engine/     HOW it is scored: pure functions, no DOM. scoring.js, session.js.
   core/       Small app plumbing: store, router, i18n, dom helper, shell, persistence.
-  features/   WHAT THE USER SEES: one folder per feature (home, quiz, result, language).
+  features/   WHAT THE USER SEES: one folder per feature (home, gallery, quiz, result, share,
+              language, decor).
+  shared/     Small helpers used by more than one feature (features never import each other).
   main.js     Wires core + features together. Rarely needs to change.
 styles/       Design tokens and shared components. Feature css lives in the feature folder.
 tests/        node --test
@@ -51,7 +53,8 @@ export default {
   state:   { name: { ...initial } },            // its slice of the store
   persist: ['name'],                             // optional: save to localStorage
   routes:  { '/path': (app) => Node | { redirect: '/' } },
-  slots:   { header: (app) => Node },            // optional: contribute to the shell
+  slots:   { 'result.after': (app, type) => Node }, // optional: add content to a named place
+  nav:     { path: '/types', label: 'ui.nav.types', order: 2 }, // optional: a tab under the header
   init(app) { app.services.name = {...} },       // optional: runs once at startup
 };
 ```
@@ -72,7 +75,13 @@ Register it with one line in `src/features/index.js`.
 
 **Change how answers score** - an option's `scores` can feed several personalities (for example `{ hin: 2, gai: 1 }`). Tie-breaking rules are in `engine/scoring.js`.
 
-**Add a feature (share card, history, leaderboard, ...)** - create `src/features/<name>/`, register it. Anything reusable (like a result calculation) goes in `engine/`, not in the feature.
+**Result links** - `#/result/GTMS` shows the result for any valid code (`parseType` in `engine/type.js` rejects bad ones and sends people home). Finishing the quiz lands on the person's own code URL, so the link is already in the address bar.
+
+**The share panel and card image** - the `share` feature plugs into the result page's `result.after` slot. `features/share/card.js` draws the 1080 x 1350 picture on a canvas; change its look there. On phones the Share button hands the picture to the share sheet (WhatsApp, Instagram...); elsewhere there are Copy link and Save image buttons.
+
+**The "All types" tab** - the `gallery` feature (`#/types`) lists every personality from the same data and locale files as the quiz, so a new personality shows up there automatically. Tabs come from each feature's `nav` field.
+
+**Add a feature (history, leaderboard, ...)** - create `src/features/<name>/`, register it. Anything reusable (like a result calculation) goes in `engine/`, not in the feature.
 
 ## Notes
 

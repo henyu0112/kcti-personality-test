@@ -1,9 +1,24 @@
 import { h } from './dom.js';
+import { renderSlot } from './slots.js';
 
-// Features can contribute small pieces to named slots ("header" and "background")
-// without the shell knowing anything about them.
-function renderSlot(app, name) {
-  return app.features.filter((feature) => feature.slots?.[name]).map((feature) => feature.slots[name](app));
+// Tabs under the header. A feature adds one by declaring
+//   nav: { path: '/types', label: 'ui.nav.types', order: 2 }
+// The tabs only show on pages that are themselves a tab (not during the quiz or on a result).
+function renderNav(app) {
+  const items = app.features
+    .map((feature) => feature.nav)
+    .filter(Boolean)
+    .sort((a, b) => a.order - b.order);
+  const path = app.router.path();
+  if (!items.some((item) => item.path === path)) return null;
+
+  return h(
+    'nav',
+    { class: 'shell__nav', 'aria-label': app.t('ui.nav.label') },
+    items.map((item) =>
+      h('a', { class: 'tab', href: `#${item.path}`, 'aria-current': item.path === path ? 'page' : null }, app.t(item.label)),
+    ),
+  );
 }
 
 export function renderShell(app, content) {
@@ -20,6 +35,7 @@ export function renderShell(app, content) {
         h('a', { class: 'shell__brand', href: '#/' }, app.t('ui.brand')),
         h('div', { class: 'shell__slot' }, renderSlot(app, 'header')),
       ),
+      renderNav(app),
       h('main', { class: 'shell__main', id: 'main', tabindex: '-1' }, content),
       h('footer', { class: 'shell__footer' }, app.t('ui.footer')),
     ),

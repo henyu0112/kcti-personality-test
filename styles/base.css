@@ -103,6 +103,31 @@ button {
   gap: 8px;
 }
 
+.shell__nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tab {
+  padding: 8px 18px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 2.5px solid var(--line);
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.tab:hover {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+}
+
+.tab[aria-current='page'] {
+  background: var(--ink);
+  color: var(--bg);
+}
+
 .shell__main {
   flex: 1;
   padding: 8px 0 32px;

@@ -15,7 +15,7 @@
   right: 0;
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1180px) {
   .decor {
     display: block;
   }
@@ -23,6 +23,8 @@
 
 .decor__sticker {
   position: absolute;
+  /* --x (0..1) slides the sticker across the column, always leaving room for its own width */
+  left: max(0px, calc(var(--x) * (100% - 170px)));
   display: inline-flex;
   align-items: center;
   gap: 8px;

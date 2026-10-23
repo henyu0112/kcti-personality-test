@@ -1,14 +1,15 @@
 import { h } from '../../core/dom.js';
-import { computeResult } from '../../engine/scoring.js';
-import { buildType } from '../../engine/type.js';
+import { renderSlot } from '../../core/slots.js';
+import { describeType } from '../../shared/type-text.js';
 
-// How the result was worked out (scores, which answers counted) is deliberately not shown:
-// the mystery is part of the fun. computeResult still returns it for tests and future use.
+// How a result was worked out (scores, which answers counted) is deliberately not shown:
+// the mystery is part of the fun. This page only needs the type, so it works for a result
+// opened from a link as well as for the person's own.
 
-function renderCategoryCard(app, result) {
+function renderCategoryCard(app, part) {
   const { t, data } = app;
-  const category = data.categoryById.get(result.categoryId);
-  const personality = data.personalityById.get(result.winner);
+  const category = data.categoryById.get(part.categoryId);
+  const personality = data.personalityById.get(part.personalityId);
   const key = `personalities.${personality.id}`;
 
   return h(
@@ -38,19 +39,19 @@ function renderCategoryCard(app, result) {
   );
 }
 
-export function renderResult(app) {
+export function renderResult(app, { type, isOwn }) {
   const { t, data, services } = app;
-  const { session, answers } = app.store.getState().quiz;
-  const results = computeResult(data, answers, session.questionOrder);
-  const type = buildType(data, results);
+  const { nickname, summary } = describeType(app, type);
 
-  // Each group fills the placeholder named by its `role` ({adjective}, {noun}, ...).
-  const words = Object.fromEntries(
-    type.parts.map(({ categoryId, personalityId }) => {
-      const { role } = data.categoryById.get(categoryId);
-      return [role, t(`types.${personalityId}.${role}`)];
-    }),
-  );
+  const actions = isOwn
+    ? [
+        h('button', { type: 'button', class: 'btn', onclick: () => services.quiz.start() }, t('ui.result.retake')),
+        h('a', { class: 'btn btn--ghost', href: '#/types' }, t('ui.result.allTypes')),
+      ]
+    : [
+        h('button', { type: 'button', class: 'btn', onclick: () => services.quiz.start() }, t('ui.result.startTest')),
+        h('a', { class: 'btn btn--ghost', href: '#/types' }, t('ui.result.allTypes')),
+      ];
 
   return h(
     'section',
@@ -58,7 +59,7 @@ export function renderResult(app) {
     h(
       'header',
       { class: 'card result__hero' },
-      h('p', { class: 'eyebrow' }, t('ui.result.eyebrow')),
+      h('p', { class: 'eyebrow' }, t(isOwn ? 'ui.result.eyebrow' : 'ui.result.eyebrowShared')),
       h(
         'h1',
         { class: 'result__code', 'aria-label': type.code },
@@ -66,8 +67,8 @@ export function renderResult(app) {
           h('span', { style: { '--accent': data.categoryById.get(categoryId).color }, 'aria-hidden': 'true' }, letter),
         ),
       ),
-      h('p', { class: 'result__nickname' }, t('ui.result.nickname', words)),
-      h('p', { class: 'result__summary' }, t('ui.result.typeSummary', words)),
+      h('p', { class: 'result__nickname' }, nickname),
+      h('p', { class: 'result__summary' }, summary),
       h(
         'ul',
         { class: 'result__chips' },
@@ -81,13 +82,9 @@ export function renderResult(app) {
         ),
       ),
     ),
+    renderSlot(app, 'result.after', type),
     h('h2', { class: 'eyebrow result__traits' }, t('ui.result.traits')),
-    results.map((result) => renderCategoryCard(app, result)),
-    h(
-      'div',
-      { class: 'result__actions' },
-      h('button', { type: 'button', class: 'btn', onclick: () => services.quiz.start() }, t('ui.result.retake')),
-      h('a', { class: 'btn btn--ghost', href: '#/' }, t('ui.result.home')),
-    ),
+    type.parts.map((part) => renderCategoryCard(app, part)),
+    h('div', { class: 'result__actions' }, actions),
   );
 }

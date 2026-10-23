@@ -1,0 +1,41 @@
+.share {
+  display: grid;
+  gap: 12px;
+}
+
+.share__title {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.share__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.share__url {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.share__preview summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.share__card {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 12px auto 0;
+  border: 2.5px solid var(--line);
+  border-radius: 12px;
+}

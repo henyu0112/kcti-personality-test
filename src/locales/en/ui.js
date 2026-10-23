@@ -3,6 +3,29 @@ export default {
   brand: 'KCTI',
   footer: 'KCTI is not science. It is 100% accurate at the kopitiam only.',
   lang: { label: 'Language' },
+  nav: { label: 'Main menu', test: 'Take the test', types: 'All types' },
+
+  gallery: {
+    title: 'All personalities',
+    lead: '{personalities} personalities in {groups} groups. Your result is one from every group, joined into a 4-letter type.',
+    letter: 'Type letter {code}',
+  },
+
+  share: {
+    title: 'Share your result',
+    text: `I'm {code}, {nickname}! What's yours? Try the KCTI test:`,
+    share: 'Share',
+    copy: 'Copy link',
+    copied: 'Link copied!',
+    copyFailed: 'Copy it from the box below',
+    save: 'Save card image',
+    saved: 'Saved!',
+    linkLabel: 'Link to this result',
+    viewCard: 'Card image',
+    previewAlt: 'Your KCTI result card',
+    cardEyebrow: 'My KCTI type',
+    cardFooter: 'Find yours at {url}',
+  },
 
   home: {
     eyebrow: 'Kacau · Cara hidup · Tengah loading · Impossible',
@@ -25,6 +48,9 @@ export default {
 
   result: {
     eyebrow: 'Your KCTI type',
+    eyebrowShared: 'A KCTI type',
+    startTest: 'Take the test',
+    allTypes: 'See all types',
     nickname: 'The {adjective} {noun}',
     typeSummary: 'You {thinking}, and you {facing}.',
     traits: 'Your four traits',

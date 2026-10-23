@@ -3,6 +3,29 @@ export default {
   brand: 'KCTI',
   footer: 'KCTI 不是科学。只在咖啡店里 100% 准确。',
   lang: { label: '语言' },
+  nav: { label: '主菜单', test: '开始测试', types: '全部类型' },
+
+  gallery: {
+    title: '全部性格',
+    lead: '{groups} 个组别共 {personalities} 种性格。你的结果是每组各一个，合成 4 个字母的类型。',
+    letter: '类型字母 {code}',
+  },
+
+  share: {
+    title: '分享你的结果',
+    text: '我是 {code}，{nickname}！你呢？来测测 KCTI：',
+    share: '分享',
+    copy: '复制链接',
+    copied: '已复制链接！',
+    copyFailed: '请从下面的框里复制',
+    save: '保存卡片图片',
+    saved: '已保存！',
+    linkLabel: '这个结果的链接',
+    viewCard: '卡片图片',
+    previewAlt: '你的 KCTI 结果卡片',
+    cardEyebrow: '我的 KCTI 类型',
+    cardFooter: '来测测你的：{url}',
+  },
 
   home: {
     eyebrow: 'Kacau · Cara hidup · Tengah loading · Impossible',
@@ -25,6 +48,9 @@ export default {
 
   result: {
     eyebrow: '你的 KCTI 类型',
+    eyebrowShared: 'KCTI 类型',
+    startTest: '开始测试',
+    allTypes: '查看全部类型',
     nickname: '{adjective}的{noun}',
     typeSummary: '你{thinking}，而且{facing}。',
     traits: '你的四个特质',
