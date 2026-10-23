@@ -50,9 +50,17 @@
   gap: 10px;
 }
 
-.gallery-card__emoji {
-  font-size: 2rem;
-  line-height: 1;
+.gallery-card__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  border: 2.5px solid var(--line);
+  border-radius: 12px;
 }
 
 .gallery-card__name {

@@ -65,7 +65,11 @@ Register it with one line in `src/features/index.js`.
 
 **Add or edit a question** - add `question('k9', 'kacau', 'bird')` in `data/questions.js` (the last argument is the personality left out, so the question shows 4 of the 5), then add `k9: { prompt, options: {...} }` with exactly those 4 answers in **every** language file. `npm test` tells you what is missing. Keep the same number of questions in each group, and spread the omissions evenly (both are tested).
 
-**Add a personality** - add it to `data/personalities.js` (with a unique `code` letter for its group), add its text in each language's `personalities.js`, add its nickname word in each language's `types.js`, and make sure questions in that group offer it (a test checks all of this).
+**Write answers that don't give the result away** - an answer should describe a situation with the personality's energy, never its name or catchphrase ("gai", "Hmmm...", "不要"...). `npm test` fails if one slips in.
+
+**Icons vs emoji** - the All types page uses line icons from `shared/icons.js` (each personality names one in `data/personalities.js`, and every personality needs its own). Result cards, the share image and the side stickers still use the emoji.
+
+**Add a personality** - add it to `data/personalities.js` (with a unique `code` letter for its group and an `icon`), add its text in each language's `personalities.js`, add its nickname word in each language's `types.js`, and make sure questions in that group offer it (a test checks all of this).
 
 **Change the final type wording** - the code is the four `code` letters in K C T I order (`engine/type.js`). The nickname is `ui.result.nickname`, built from the K and C words, and the summary is `ui.result.typeSummary`, built from the T and I words. The word each group supplies is set by its `role` in `data/categories.js`; the words themselves are in `locales/<lang>/types.js`. To hand-write a special title for one combination later, check `type.code` in the result view before using the generated nickname.
 

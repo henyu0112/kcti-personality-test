@@ -1,4 +1,5 @@
 import { h } from '../../core/dom.js';
+import { icon } from '../../shared/icons.js';
 
 function renderCard(app, personality) {
   const { t } = app;
@@ -10,7 +11,7 @@ function renderCard(app, personality) {
     h(
       'div',
       { class: 'gallery-card__top' },
-      h('span', { class: 'gallery-card__emoji', 'aria-hidden': 'true' }, personality.emoji),
+      h('span', { class: 'gallery-card__icon' }, icon(personality.icon, { size: 26 })),
       h('h3', { class: 'gallery-card__name' }, t(`${key}.name`)),
       h(
         'span',

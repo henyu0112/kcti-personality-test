@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { data } from '../src/data/index.js';
 import { locales } from '../src/locales/index.js';
+import { ICON_SHAPES } from '../src/shared/icons.js';
 
 const flatten = (object, prefix = '') =>
   Object.entries(object).flatMap(([key, value]) =>
@@ -35,6 +36,14 @@ test('type letters are single capitals, unique within their group', () => {
     assert.ok(letters.every((letter) => /^[A-Z]$/.test(letter)), `${category.id}: ${letters}`);
     assert.equal(new Set(letters).size, letters.length, `${category.id}: duplicate letter in ${letters}`);
   }
+});
+
+test('every personality has its own icon from the icon set', () => {
+  for (const personality of data.personalities) {
+    assert.ok(ICON_SHAPES[personality.icon], `${personality.id} uses unknown icon "${personality.icon}"`);
+  }
+  const icons = data.personalities.map((p) => p.icon);
+  assert.equal(new Set(icons).size, icons.length, 'two personalities share an icon');
 });
 
 test('every question shows 4 different personalities of its own category', () => {
@@ -84,6 +93,30 @@ for (const [code, bundle] of Object.entries(locales)) {
       for (const option of question.options) assert.ok(text.options?.[option.id], `${question.id}.options.${option.id}`);
       for (const extra of Object.keys(text.options ?? {})) {
         assert.ok(question.options.some((o) => o.id === extra), `${question.id} has text for unused option "${extra}"`);
+      }
+    }
+  });
+
+  test(`locale "${code}" questions never give a personality away by name or catchphrase`, () => {
+    // Words that would make an answer obvious: every personality's name (split into words),
+    // plus a few catchphrases that are not part of a name.
+    const extras = ['lepak', '可爱勒', '不要'];
+    const ordinaryWords = new Set(['beh']); // "Beh" of "Beh Hiao" would match "behind"; "Hiao" still catches the name
+    const banned = [
+      ...data.personalities
+        .flatMap((p) => bundle.personalities[p.id].name.split(/\s+/))
+        .filter((word) => word.length >= 3 && !ordinaryWords.has(word.toLowerCase())),
+      ...extras,
+    ];
+    const escape = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const appears = (text, word) =>
+      /^[\x00-\x7f]+$/.test(word) ? new RegExp(`\\b${escape(word)}`, 'i').test(text) : text.includes(word);
+
+    for (const question of data.questions) {
+      const text = bundle.questions[question.id];
+      for (const [where, line] of [['prompt', text.prompt], ...Object.entries(text.options).map(([id, t]) => [`option ${id}`, t])]) {
+        const hit = banned.find((word) => appears(line, word));
+        assert.equal(hit, undefined, `${question.id} ${where} contains "${hit}": ${line}`);
       }
     }
   });
