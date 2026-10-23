@@ -44,7 +44,7 @@ export function renderHome(app) {
       h('p', { class: 'eyebrow' }, t('ui.home.eyebrow')),
       h('h1', { class: 'home__title' }, t('ui.brand')),
       h('p', { class: 'home__subtitle' }, t('ui.home.title')),
-      h('p', { class: 'home__lead' }, t('ui.home.lead', { questions: data.questions.length, groups: data.categories.length })),
+      h('p', { class: 'home__lead' }, t('ui.home.lead', { questions: data.quiz.questionsPerTest, groups: data.categories.length })),
     ),
     renderActions(app),
     h(

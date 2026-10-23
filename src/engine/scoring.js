@@ -67,15 +67,16 @@ export function computeResult(data, answers, questionOrder = data.questions.map(
   });
 }
 
-/** True when every question has a valid answer. */
-export function isComplete(data, answers) {
-  return data.questions.every((question) => question.options.some((o) => o.id === answers[question.id]));
+/** True when every question of the test (by default: the whole pool) has a valid answer. */
+export function isComplete(data, answers, questionOrder = data.questions.map((q) => q.id)) {
+  return questionOrder.every((id) => data.questionById.get(id)?.options.some((o) => o.id === answers[id]));
 }
 
-/** Keep only answers that still point at a real question and option. */
-export function pruneAnswers(data, answers = {}) {
+/** Keep only answers to questions of this test (default: any) that point at a real option. */
+export function pruneAnswers(data, answers = {}, questionOrder = null) {
   const kept = {};
   for (const [questionId, optionId] of Object.entries(answers)) {
+    if (questionOrder && !questionOrder.includes(questionId)) continue;
     const question = data.questionById.get(questionId);
     if (question?.options.some((o) => o.id === optionId)) kept[questionId] = optionId;
   }

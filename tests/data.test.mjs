@@ -58,17 +58,28 @@ test('every question shows 4 different personalities of its own category', () =>
   }
 });
 
-test('every category has the same number of questions', () => {
-  const counts = data.categories.map((c) => questionsOf(c.id).length);
-  assert.equal(new Set(counts).size, 1, `counts differ: ${counts}`);
+test('the test length is allowed by the data', () => {
+  const { questionsPerCategory, questionsPerTest } = data.quiz;
+  assert.ok(Number.isInteger(questionsPerCategory) && questionsPerCategory >= 1);
+  assert.equal(questionsPerTest, questionsPerCategory * data.categories.length);
+  for (const category of data.categories) {
+    assert.ok(questionsPerCategory <= personalitiesOf(category.id).length, `${category.id}: more questions than personalities`);
+  }
 });
 
-test('personalities are offered about equally often within a group (spread of at most 1)', () => {
+test('every personality is left out by at least 2 questions, so tests can vary', () => {
   for (const category of data.categories) {
-    const counts = personalitiesOf(category.id).map(
-      (p) => questionsOf(category.id).filter((q) => q.options.some((o) => o.id === p.id)).length,
-    );
-    assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `${category.id}: offered ${counts} times`);
+    for (const personality of personalitiesOf(category.id)) {
+      const count = questionsOf(category.id).filter((q) => q.omit === personality.id).length;
+      assert.ok(count >= 2, `${personality.id} is left out by only ${count} question(s)`);
+    }
+  }
+});
+
+test('personalities are left out by about the same number of questions within a group', () => {
+  for (const category of data.categories) {
+    const counts = personalitiesOf(category.id).map((p) => questionsOf(category.id).filter((q) => q.omit === p.id).length);
+    assert.ok(Math.max(...counts) - Math.min(...counts) <= 1, `${category.id}: left out ${counts} times`);
   }
 });
 

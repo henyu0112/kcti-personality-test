@@ -8,7 +8,7 @@ loadStyles(new URL('./result.css', import.meta.url));
 /** The type this browser's finished quiz produced, or null if there isn't one. */
 function ownType(app) {
   const { session, answers } = app.store.getState().quiz;
-  if (!session || !isComplete(app.data, answers)) return null;
+  if (!session || !isComplete(app.data, answers, session.questionOrder)) return null;
   return buildType(app.data, computeResult(app.data, answers, session.questionOrder));
 }
 

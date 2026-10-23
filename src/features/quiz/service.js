@@ -53,7 +53,7 @@ export function createQuizService(app) {
         update({ session: null, answers: {}, step: 0 });
         return;
       }
-      update({ answers: pruneAnswers(data, answers), step: Math.min(Math.max(step, 0), total() - 1) });
+      update({ answers: pruneAnswers(data, answers, session.questionOrder), step: Math.min(Math.max(step, 0), total() - 1) });
     },
   };
 }

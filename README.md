@@ -1,9 +1,10 @@
 # KCTI - Kacau Character Type Indicator
 
-A funny Malaysian-slang personality test. 4 groups (K, C, T, I) x 5 personalities, 32 questions
-(4 answers each), English and Chinese. You get one personality per group, combined into a
-4-letter type like **GTMS** with a nickname ("The Doomed Pillar"). How the score was reached is
-deliberately not shown.
+A funny Malaysian-slang personality test. 4 groups (K, C, T, I) x 5 personalities, English and
+Chinese. A test is 20 questions (4 answers each) drawn at random from a pool of 60, so no two
+tests are quite the same. You get one personality per group, combined into a 4-letter type like
+**GTMS** with a nickname ("The Doomed Pillar"). How the score was reached is deliberately not
+shown.
 
 | Letter | Group | Personalities |
 |---|---|---|
@@ -63,7 +64,9 @@ Register it with one line in `src/features/index.js`.
 
 ## Common changes
 
-**Add or edit a question** - add `question('k9', 'kacau', 'bird')` in `data/questions.js` (the last argument is the personality left out, so the question shows 4 of the 5), then add `k9: { prompt, options: {...} }` with exactly those 4 answers in **every** language file. `npm test` tells you what is missing. Keep the same number of questions in each group, and spread the omissions evenly (both are tested).
+**Add or edit a question** - the questions are a pool. Add `question('k16', 'kacau', 'bird')` in `data/questions.js` (the last argument is the personality left out, so the question shows 4 of the 5), then add `k16: { prompt, options: {...} }` with exactly those 4 answers in **every** language file. `npm test` tells you what is missing. Keep each personality left out by about the same number of questions (at least 2 each; tested): a test draws one question per left-out personality in each group, so a bigger pool just means more variety between tests.
+
+**Change how long a test is** - `questionsPerCategory` in `data/quiz.js` (default 5, giving 20 questions; it can't exceed the 5 personalities per group). A shorter test shows some personalities slightly less often, which the scoring allows for. Saved quizzes of a different length are discarded automatically.
 
 **Write answers that don't give the result away** - an answer should describe a situation with the personality's energy, never its name or catchphrase ("gai", "Hmmm...", "不要"...). `npm test` fails if one slips in.
 

@@ -6,16 +6,16 @@ export default {
   nav: { label: 'Main menu', test: 'Take the test', types: 'All types' },
 
   settings: {
-    open: 'Settings',
-    title: 'Settings',
-    close: 'Close settings',
-    reset: 'Reset to defaults',
-    theme: { label: 'Colour theme', light: 'Light', dark: 'Dark', system: 'Match device' },
-    textSize: { label: 'Text size', normal: 'Normal', large: 'Large', xlarge: 'Extra large' },
-    reduceMotion: { label: 'Reduce motion', hint: 'Stops animations and moving decorations' },
-    highContrast: { label: 'High contrast', hint: 'Stronger colours and borders' },
-    wideSpacing: { label: 'Comfortable spacing', hint: 'More space between lines and letters' },
-    hideDecor: { label: 'Hide decorations', hint: 'Removes the floating stickers' },
+    open: 'Fiddle with the settings',
+    title: 'Settings (your site, your rules)',
+    close: 'Okay, done',
+    reset: 'Panic button: undo everything',
+    theme: { label: 'Light or dark? Pick your vibe', light: 'Bright and shiny', dark: 'Dark and mysterious', system: 'Whatever my device says' },
+    textSize: { label: 'Text size (for tired eyes)', normal: 'Just right', large: 'Big', xlarge: 'Billboard' },
+    reduceMotion: { label: 'Stop the wiggling', hint: 'Turns off animations and floating stickers. Good if moving things make you dizzy.' },
+    highContrast: { label: 'Turbo contrast', hint: 'Bolder colours and sharper borders, so everything pops.' },
+    wideSpacing: { label: 'Breathing room for words', hint: 'More space between lines and letters, so text is easier to read.' },
+    hideDecor: { label: 'Send the stickers away', hint: 'Hides the floating stickers so they can have a rest.' },
   },
 
   gallery: {
